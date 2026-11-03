@@ -621,38 +621,3 @@ done
   * Without `part_info.npz`, `--nparticles-from auto` uses `part.npandora` − 1, which assumes one unassociated-hits object per interaction. FC/PC is then unavailable.
 * **`make_part_info.py` on the real file:** `MakeProject` must compile the full `caf::StandardRecord` from the file's streamer info. This needs a C++ compiler and `rootcling`, and was not run on the real CAF. If it fails, use `--dict-lib` with the duneanaobj dictionary from your DUNE software setup.
 * **FC/PC definition** uses the minimum `walldist` over non-hit-collection particles of the first interaction. If your analysis defines containment differently (e.g. per track end point, or including the hit collection), the rule is in `partinfo_walldist_min` in `make_part_info.py`.
-
----
-
-## 10. Changelog
-
-| Date | Change |
-|---|---|
-| 2026-10-29 | `plot_cv_weights.py`: CV weight histograms; CV from `systsHeader/cv`; `--logx`/`--logy`; distinct colours; note on identical dials |
-| 2026-10-29 | `plot_syst_spectra.py`: reco/true spectra per CVN sample at CV and ±nσ (definitions from `systs.py`); other dials at CV; ratio panels |
-| 2026-10-29 | Custom binning: `--edges`, `--binning atm`, `--uniform-axis`, `--per-width`; `--logx` |
-| 2026-10-29 | Ratio panel auto-range fits all curves; `--ratio-logy` |
-| 2026-10-29 | `syst_covariance.py`: per-dial ±1σ universe covariance, summed over dials, correlation, fractional covariance, error band, `.npz`/`.root` output |
-| 2026-10-29 | Covariance: ratio panel on the band, `--per-dial-plots`, physical `--logx`, ±σ universe curves on band plots (`--band-universes`) |
-| 2026-10-29 | Default input paths set to the CAF and weight files in §2 |
-| 2026-10-29 | README added |
-| 2026-10-29 | Sample selection changed from CVN argmax to CVN thresholds (numu > 0.56, nue > 0.55; larger score wins when both pass); `--selection`, `--cvn-numu-cut`, `--cvn-nue-cut` |
-| 2026-10-29 | Reco cos θ<sub>z</sub> = −`dir.calo.y` for all samples (quality cut now requires a non-zero calo direction); old estimator kept as `--cosz systs` |
-| 2026-10-29 | `check_weights.py` added; `--base-weight xsec_osc\|osc\|final` option in spectra and covariance scripts |
-| 2026-10-29 | Base weight now from the flux branches: default `flux_osc` = xsec × (flux_nue·osc_from_e_w + flux_numu·osc_from_mu_w); `flux_sample` picks the flux by reco CVN sample; `check_weights.py` tests the flux formulas |
-| 2026-10-29 | Simplified: oscillated case only, base weight = `final_oscillated_w`; `--base-weight` and `--unoscillated` removed; `check_weights.py` kept as an optional diagnostic |
-| 2026-10-29 | `plot_reco_cosz.py` added (from the user's heshw/lngtrk cos θ<sub>z</sub> script): y axis weighted by `final_oscillated_w` × dial CVs; `--syst`, `--cv-dials`, `--no-dial-cv`, `--unweighted`, `--selection mach3\|analysis`; default files |
-| 2026-10-30 | Combined samples `nue+numu` and `all` (`--samples`) in spectra and covariance scripts |
-| 2026-10-30 | `--detsys-compatible` (Claire's detsys conditions), `--cosz detsys`, `--selection mach3`; covariance band plot `--per-width` / `--ylabel` |
-| 2026-10-30 | `--interaction all\|cc\|nc` (true `mc.nu.iscc`) in spectra and covariance scripts; `--cc-only` kept as a shortcut; choice shown in plot titles |
-| 2026-10-30 | Default reco cos θ<sub>z</sub> = MaCh3 direction (`--cosz mach3`): `dir.calo` if < 2 pandora particles (hit collection excluded) or `Enu.calo` ≥ 1.3 GeV / NaN, else `heshw` (ν<sub>e</sub>-like) / `lngtrk`; normalised −d<sub>y</sub>/\|d\| |
-| 2026-10-30 | Weights: default base = unoscillated xsec × true-flavour flux (`--base-weight flux_xsec`; `final` keeps `final_oscillated_w`); raw stored responses (negatives kept, nonfinite → missing bin; `--clip-responses` for the old handling); shared b-scan zero response applied once per provider (`--independent-b-scans`); NaN-safe histogramming; covariance marks missing bins. Applied in spectra, covariance and `plot_reco_cosz.py` |
-| 2026-10-30 | `plot_reco_cosz.py`: ν<sub>e</sub>-like shows only `heshw`, ν<sub>μ</sub>-like only `lngtrk`; `--show-both` for the overlay |
-| 2026-10-30 | Checked `--cosz mach3` against the MaCh3 C++ algorithm (line-by-line port: identical); `plot_reco_cosz.py` now uses it by default (`--cosz mach3`), raw heshw/lngtrk kept as `--cosz pfp` |
-| 2026-10-30 | Real CAF stores `part.pandora` memberwise (unreadable by uproot): `--nparticles-from auto\|type\|npandora\|npfps`, auto falls back to `part.npandora` − 1 and prints the npandora/npfps agreement; same in `plot_reco_cosz.py` |
-| 2026-10-30 | Dial groups replaced by the user's 27 physics groups (CCQE axial ×3, vector, templates, QE interference, NCEL, RES/ResIso, NonRES CC/NC, DIS, MEC ×8, FSI, pion absorption, Woods–Saxon, flavour ratios) |
-| 2026-10-30 | FC/PC: `make_part_info.py` (PyROOT/RDataFrame, classes from `MakeProject`) → `part_info.npz` with `walldist_min` and exact nParticles; `--containment fc pc`, `--walldist-cut`, `--part-info`; new variables `reco_y`/`true_y`; default binning `atm_fcpc` with the FC/PC ν<sub>e</sub>/ν<sub>μ</sub> E<sub>ν</sub>, y and cos θ<sub>z</sub> edges |
-| 2026-10-31 | `make_part_info.py`: if `rootcint`/`rootcling` is missing (pip ROOT), compile the MakeProject classes with ACLiC (only g++ needed) |
-| 2026-11-01 | `plot_syst_spectra_josh.py` and `syst_covariance_josh.py`: Josh's truth-channel samples, common selection with cut flow, FC > 10 / PC 0–10 cm, hybrid direction (NC → calo), e_had energies, q0 truth, one-dial weights with nonfinite → 1, ±9999 clip, ≤ 0 → 0; band plots take a `cv_label` |
-| 2026-11-01 | Code put in a git repository: `requirements.txt`, `.gitignore` |
-| 2026-11-02 | `plot_syst_spectra_josh.py`: y axis is events / bin width by default ("Events / bin width"); `--no-per-width` for events per bin |
