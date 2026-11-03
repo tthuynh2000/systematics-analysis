@@ -1,0 +1,7 @@
+# Plotting / covariance scripts
+numpy
+matplotlib
+uproot>=5
+awkward>=2
+# make_part_info.py additionally needs PyROOT (a ROOT installation with Python
+# bindings, e.g. from the DUNE software stack or `pip install ROOT`) and g++.
